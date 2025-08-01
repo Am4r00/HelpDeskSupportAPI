@@ -4,7 +4,7 @@ public enum Priority {
     LOW("Low Priority"),
     AVARANGE("Medium priority"),
     HIGH("High priority"),
-    CRITICISM("Critical priority");
+    CRITICAL("Critical priority");
 
     private final String label;
 
