@@ -5,11 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import java.util.Optional;
 
 public interface CallHistoryRepository extends JpaRepository<CallHistory, Long> {
     /***
-     * Busca todo historico do chamado em ordem cronológia em forma de páginas
+     * Busca td historico do chamado em ordem cronológia em forma de páginas
      * para melhorar a organização dos registros
      * Searches the entire call history in chronological order in page format
      * to improve record organization
@@ -25,6 +27,8 @@ public interface CallHistoryRepository extends JpaRepository<CallHistory, Long> 
      * @param calledId ID do chamado
      * @return retorna uma ultima interação do chamado
      */
-    @EntityGraph(attributePaths = {"user"})
-    Optional<CallHistory> findByTopByCalledIdOrderByCreatedAtDesc(Long calledId);
+    @EntityGraph(attributePaths = {"users"})
+    @Query
+    Optional<CallHistory> findTopByCalledIdOrderByCreatedAtDesc(Long calledId);
+
 }

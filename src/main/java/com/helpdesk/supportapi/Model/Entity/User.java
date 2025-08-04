@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +23,7 @@ public class User implements UserDetails {
     @NotNull
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     @NotNull
     private String email;
 
@@ -31,15 +32,16 @@ public class User implements UserDetails {
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_positions", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "position",nullable = false)
     private List<Position> positions;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
 
     public Long getId() {

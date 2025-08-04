@@ -26,7 +26,7 @@ public class Called {
     @Column(nullable = false)
     private StatusCalled status;
 
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @ManyToOne
     private Category category;
 
@@ -36,11 +36,10 @@ public class Called {
     private LocalDateTime  updateDate;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "User_Responsible_id")
     private User responsibleUser;
 
     public LocalDateTime getCreationDate() {

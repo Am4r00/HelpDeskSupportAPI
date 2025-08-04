@@ -1,8 +1,12 @@
 package com.helpdesk.supportapi.Repository;
 
 import com.helpdesk.supportapi.Model.Entity.User;
+import com.helpdesk.supportapi.Model.Enums.Position;
+import com.helpdesk.supportapi.Model.Enums.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 
 /**
@@ -35,8 +39,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
      *
      * @return Lista de usuários inativos.
      */
-    @Query("SELECT u FROM User u WHERE u.status = 'INACTIVE'")
-    List<User> findAllInactiveUsers();
+    default  List<User> findAllInactiveUsers(){
+        return findAllByStatus(Status.INACTIVE);
+    }
 
     /**
      * Busca todos os usuários ativos.
@@ -44,8 +49,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
      *
      * @return Lista de usuários ativos.
      */
-    @Query("SELECT u FROM User u WHERE u.status = 'ACTIVE'")
-    List<User> findAllActiveUsers();
+    default  List<User> findAllActiveUsers(){
+        return findAllByStatus(Status.ACTIVE);
+    }
+
+    /***
+     * Chamada padrão pora status
+     * @param status
+     * @return uma busca inspirada no parâmetro
+     */
+    List<User> findAllByStatus(Status status);
 
     /**
      * Busca todos os usuários com posição ADMIN.
@@ -53,8 +66,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
      *
      * @return Lista de usuários administradores.
      */
-    @Query("SELECT u FROM User u WHERE u.positions = 'ADMIN'")
-    List<User> findAllAdminUsers();
+    default  List<User> findAllAdminUsers(){
+            return findAllByPosition(Position.ADMIN);
+    }
 
     /**
      * Busca todos os usuários com posição SUPPORT.
@@ -62,8 +76,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
      *
      * @return Lista de usuários de suporte.
      */
-    @Query("SELECT u FROM User u WHERE u.positions = 'SUPPORT'")
-    List<User> findAllSupportUsers();
+    default  List<User> findAllSupportUsers(){
+        return findAllByPosition(Position.SUPPORT);
+    }
 
     /**
      * Busca todos os usuários com posição CUSTOMER.
@@ -71,6 +86,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
      *
      * @return Lista de usuários clientes.
      */
-    @Query("SELECT u FROM User u WHERE u.positions = 'CUSTOMER'")
-    List<User> findAllCustomerUsers();
+    default  List<User> findAllCustumerUsers(){
+        return findAllByPosition(Position.CUSTOMER);
+    }
+
+    /***
+     * Chamada padrão pora position
+     * @param position
+     * @return uma busca inspirada no parâmetro
+     */
+    @Query("SELECT DISTINCT u FROM User u JOIN u.positions p WHERE p = :position")
+    List<User> findAllByPosition(@Param("position") Position position);
 }
