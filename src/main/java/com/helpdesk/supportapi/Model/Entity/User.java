@@ -1,4 +1,4 @@
-package com.helpdesk.supportapi.Model;
+package com.helpdesk.supportapi.Model.Entity;
 
 import com.helpdesk.supportapi.Model.Enums.Position;
 import com.helpdesk.supportapi.Model.Enums.Status;
@@ -32,11 +32,14 @@ public class User implements UserDetails {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private List<Position> positions;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
+    @Column(nullable = false, updatable = false)
     private LocalDateTime creationDate;
 
     public Long getId() {

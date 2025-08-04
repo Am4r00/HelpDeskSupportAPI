@@ -1,4 +1,4 @@
-package com.helpdesk.supportapi.Model;
+package com.helpdesk.supportapi.Model.Entity;
 
 import jakarta.persistence.*;
 
@@ -8,8 +8,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
+
+    @Column(nullable = false, length = 255)
     private String description;
 
     public Long getId() {

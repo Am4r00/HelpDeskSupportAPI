@@ -1,4 +1,4 @@
-package com.helpdesk.supportapi.Model;
+package com.helpdesk.supportapi.Model.Entity;
 
 import com.helpdesk.supportapi.Model.Enums.TypeMessage;
 import jakarta.persistence.*;
@@ -12,22 +12,24 @@ public class CalledInterection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String message;
 
+    @Column(nullable = false,updatable = false)
     private LocalDateTime dateHour;
 
     @ManyToOne
     @NotNull
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
     @ManyToOne
     @NotNull
-    @JoinColumn(name = "called_id")
+    @JoinColumn(name = "called_id",nullable = false)
     private Called called;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TypeMessage typeMessage;
 
     public LocalDateTime getDateHour() {

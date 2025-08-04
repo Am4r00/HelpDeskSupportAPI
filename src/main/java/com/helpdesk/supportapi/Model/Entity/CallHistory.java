@@ -1,4 +1,4 @@
-package com.helpdesk.supportapi.Model;
+package com.helpdesk.supportapi.Model.Entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -8,23 +8,28 @@ public class CallHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime dateHour;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(length = 510, nullable = false)
     private String eventDescription;
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch =  FetchType.LAZY)
+    @JoinColumn(name = "called_id", nullable = false)
     private Called called;
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch =  FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public LocalDateTime getDateHour() {
-        return dateHour;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     @PrePersist
-    public void setDateHour(){
-        this.dateHour = LocalDateTime.now();
-    }
+    public void setCreatedAt(){
+        if(createdAt ==null) this.createdAt = LocalDateTime.now();}
 
     public Long getId() {
         return id;

@@ -1,6 +1,6 @@
 package com.helpdesk.supportapi.Repository;
 
-import com.helpdesk.supportapi.Model.Called;
+import com.helpdesk.supportapi.Model.Entity.Called;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
