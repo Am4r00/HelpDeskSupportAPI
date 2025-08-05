@@ -1,4 +1,4 @@
-package com.helpdesk.supportapi.Model;
+package com.helpdesk.supportapi.Model.Entity;
 
 import com.helpdesk.supportapi.Model.Enums.Priority;
 import com.helpdesk.supportapi.Model.Enums.StatusCalled;
@@ -11,27 +11,35 @@ public class Called {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 25)
     private String title;
+
+    @Column(nullable = false, length = 510)
     private String description;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Priority priority;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private StatusCalled status;
 
+    @JoinColumn(nullable = false)
     @ManyToOne
     private Category category;
 
-
+    @Column(nullable = false, updatable = false)
     private LocalDateTime creationDate;
+
     private LocalDateTime  updateDate;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "User_Responsible_id")
     private User responsibleUser;
 
     public LocalDateTime getCreationDate() {
