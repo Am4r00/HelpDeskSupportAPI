@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,6 +44,23 @@ public class User implements UserDetails {
 
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
+
+    public User() {
+    }
+
+    public User(String password, String email, String name) {
+        this.password = password;
+        this.email = email;
+        this.name = name;
+    }
+
+    public User(String name, String email, String password, List<Position> positions, Status status) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.positions = new ArrayList<>();
+        this.status = status;
+    }
 
     public Long getId() {
         return id;

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Repository para gerenciamento de usuários no sistema.
@@ -31,7 +32,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @param email E-mail do usuário.
      * @return Usuário correspondente ou null se não encontrado.
      */
-    User findByEmail(String email);
+   Optional<User> findByEmail(String email);
 
     /**
      * Busca todos os usuários inativos.
@@ -76,6 +77,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      *
      * @return Lista de usuários de suporte.
      */
+
     default  List<User> findAllSupportUsers(){
         return findAllByPosition(Position.SUPPORT);
     }
