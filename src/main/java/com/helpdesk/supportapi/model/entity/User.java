@@ -1,0 +1,133 @@
+package com.helpdesk.supportapi.model.entity;
+
+import com.helpdesk.supportapi.model.enums.Position;
+import com.helpdesk.supportapi.model.enums.Status;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Entity
+@Table(name = "users")
+public class User implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    @NotNull
+    private String name;
+
+    @Column(nullable = false,unique = true)
+    @NotNull
+    private String email;
+
+    @Column(nullable = false)
+    @NotNull
+    private String password;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_positions", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "position",nullable = false)
+    private List<Position> positions;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
+    @Column(name = "creation_date", nullable = false, updatable = false)
+    private LocalDateTime creationDate;
+
+    public User() {
+    }
+
+    public User(String password, String email, String name) {
+        this.password = password;
+        this.email = email;
+        this.name = name;
+    }
+
+    public User(String name, String email, String password, List<Position> positions, Status status) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.positions = new ArrayList<>();
+        this.status = status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<Position> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<Position> positions) {
+        this.positions = positions;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public LocalDateTime  getCreationDate() {
+        return creationDate;
+    }
+    @PrePersist
+    public void setCreationDate(){
+        this.creationDate = LocalDateTime.now();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return positions.stream()
+                .map(position -> (GrantedAuthority) () -> "POSITION_" + position.name())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+}
