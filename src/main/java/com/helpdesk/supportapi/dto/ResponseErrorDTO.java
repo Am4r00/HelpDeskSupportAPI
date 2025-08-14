@@ -2,6 +2,10 @@ package com.helpdesk.supportapi.dto;
 
 import java.time.LocalDateTime;
 
+/**
+ * Classe para formatar e deixar o erro mais legivel e amigável
+ * Class to format and make the error more readable and user-friendly
+ */
 public class ResponseErrorDTO {
     private int status;
     private String message;

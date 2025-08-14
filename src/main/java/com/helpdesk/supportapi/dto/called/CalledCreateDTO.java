@@ -21,6 +21,11 @@ public class CalledCreateDTO {
     @NotBlank(message = "categoryId is mandatory")
     private Long categoryId;
 
+    public CalledCreateDTO(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
     public String getTitle() {
         return title;
     }

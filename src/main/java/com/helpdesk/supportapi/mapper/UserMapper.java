@@ -2,10 +2,18 @@ package com.helpdesk.supportapi.mapper;
 
 import com.helpdesk.supportapi.dto.users.*;
 import com.helpdesk.supportapi.model.entity.User;
+
 import java.util.ArrayList;
 
 public class UserMapper {
 
+    /**
+     * DTO para expor apenas dados necessários do user.
+     * DTO to expose only necessary user data.
+     *
+     * @param user
+     * @return
+     */
     public static UserDTO toUserDTO(User user) {
         UserDTO userDTO = new UserDTO(
                 user.getId(),
@@ -16,6 +24,13 @@ public class UserMapper {
         return userDTO;
     }
 
+    /**
+     * DTO que expoe tudo menos dados sensiveis do usuário.
+     * DTO that exposes everything except sensitive user data.
+     *
+     * @param user
+     * @return
+     */
     public static UserDetailDTO toUserDetailDTO(User user) {
         UserDetailDTO userDetailDTO = new UserDetailDTO(
                 user.getId(),
@@ -28,15 +43,33 @@ public class UserMapper {
         return userDetailDTO;
     }
 
-    public static UserUpdateDTO upDateUser(User user){
-        UserUpdateDTO userUpdateDTO = new UserUpdateDTO(
-                user.getName(),
-                user.getPositions(),
-                user.getStatus());
+    /**
+     * Aplica novas atualizações ao usuário por meio de um dto
+     *
+     * @param user
+     * @param dto
+     */
+    public static void upDateUser(User user, UserUpdateDTO dto) {
+        if (dto.getName() != null) {
+            user.setName(dto.getName());
+        }
 
-        return userUpdateDTO;
+        if (dto.getPositions() != null) {
+            user.setPositions(new ArrayList<>(dto.getPositions()));
+        }
+
+        if (dto.getStatus() != null) {
+            user.setStatus(dto.getStatus());
+        }
     }
 
+    /**
+     * Converte um userPublicSingUpDTO criado pelo usuario em User
+     * Converts a userPublicSingUpDTO created by the user to User
+     *
+     * @param dto
+     * @return
+     */
     public static User toEntityFromPublicSignup(UserPublicSignupDTO dto) {
         User user = new User(
                 dto.getName(),
@@ -45,6 +78,13 @@ public class UserMapper {
         return user;
     }
 
+    /**
+     * Converte um UserAdminCreateDTO criado pelo Admin em user
+     * Converts a UserAdminCreateDTO created by the Admin to User
+     *
+     * @param dto
+     * @return
+     */
     public static User toEntityFromAdmin(UserAdminCreateDTO dto) {
         User user = new User(
                 dto.getName(),

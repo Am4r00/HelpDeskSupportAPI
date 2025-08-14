@@ -4,6 +4,10 @@ import com.helpdesk.supportapi.model.enums.Position;
 
 import java.util.List;
 
+/**
+ * Classe para expor apenas o nescessário do Usuário.
+ * Class to expose only what the User needs.
+ */
 public class UserDTO {
 
     private Long id;

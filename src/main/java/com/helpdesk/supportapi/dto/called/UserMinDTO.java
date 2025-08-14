@@ -1,5 +1,9 @@
 package com.helpdesk.supportapi.dto.called;
 
+/**
+ * Classe que mostra apenas o necessário para incluir dentro do chamado.
+ * Class that shows only what is necessary to include within the call.
+ */
 public class UserMinDTO {
     private Long id;
     private String name;

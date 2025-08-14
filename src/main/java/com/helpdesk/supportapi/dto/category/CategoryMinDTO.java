@@ -1,5 +1,9 @@
-package com.helpdesk.supportapi.dto.called;
+package com.helpdesk.supportapi.dto.category;
 
+/**
+ * Classe que mostra apenas o necessário para incluir dentro do chamado.
+ * Class that shows only what is necessary to include within the call.
+ */
 public class CategoryMinDTO {
     private Long id;
     private String name;

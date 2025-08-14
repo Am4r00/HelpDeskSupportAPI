@@ -6,29 +6,20 @@ import com.helpdesk.supportapi.model.enums.StatusCalled;
 
 import java.time.LocalDateTime;
 
+/**
+ * Classe que apenas mostra o nescessário do chamado.
+ * Class that only shows what is necessary for the call.
+ */
 public class CalledDTO {
     private Long id;
     private String title;
     private Priority priority;
     private StatusCalled status;
-    private CategoryMinDTO category;
-
-    private UserMinDTO responsible;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime creationDate;
+    private LocalDateTime updateDate;
 
     public CalledDTO() {
-    }
-
-    public CalledDTO(Long id, String title, Priority priority, StatusCalled status, CategoryMinDTO category, LocalDateTime creationDate, UserMinDTO responsible) {
-        this.id = id;
-        this.title = title;
-        this.priority = priority;
-        this.status = status;
-        this.category = category;
-        this.creationDate = creationDate;
-        this.responsible =responsible;
     }
 
     public Long getId() {
@@ -47,6 +38,7 @@ public class CalledDTO {
         this.title = title;
     }
 
+
     public Priority getPriority() {
         return priority;
     }
@@ -63,23 +55,8 @@ public class CalledDTO {
         this.status = status;
     }
 
-    public CategoryMinDTO getCategory() {
-        return category;
-    }
+    public LocalDateTime getUpdateDate() {return updateDate;}
 
-    public void setCategory(CategoryMinDTO category) {
-        this.category = category;
-    }
+    public void setUpdateDate(LocalDateTime updateDate) {this.updateDate = updateDate;}
 
-    public LocalDateTime getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public UserMinDTO getResponsible() {return responsible;}
-
-    public void setResponsible(UserMinDTO responsible) {this.responsible = responsible;}
 }
