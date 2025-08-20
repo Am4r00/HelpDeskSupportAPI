@@ -17,7 +17,7 @@ public class Category {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Priority defaultPriority;
+    private  Priority defaultPriority;
 
     public Long getId() {
         return id;
@@ -42,4 +42,8 @@ public class Category {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public Priority getDefaultPriority() {
+        return defaultPriority;}
+
 }

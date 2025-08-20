@@ -21,7 +21,10 @@ public class CallHistory {
 
     @ManyToOne(optional = false, fetch =  FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User userResponsible;
+
+    public CallHistory() {
+    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -56,10 +59,10 @@ public class CallHistory {
     }
 
     public User getUser() {
-        return user;
+        return userResponsible;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(User userResponsible) {
+        this.userResponsible = userResponsible;
     }
 }

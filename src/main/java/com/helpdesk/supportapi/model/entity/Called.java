@@ -3,8 +3,10 @@ package com.helpdesk.supportapi.model.entity;
 import com.helpdesk.supportapi.model.enums.Priority;
 import com.helpdesk.supportapi.model.enums.StatusCalled;
 import jakarta.persistence.*;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Called {
@@ -40,7 +42,10 @@ public class Called {
     private User user;
 
     @ManyToOne
-    private User responsibleUser;
+    private User userResponsible;
+
+    @OneToMany
+    private List<CallHistory> callHistory;
 
     public LocalDateTime getCreationDate() {
         return creationDate;
@@ -56,7 +61,7 @@ public class Called {
     }
 
     public User getResponsibleUser() {
-        return responsibleUser;
+        return userResponsible;
     }
 
     @PreUpdate
@@ -64,8 +69,8 @@ public class Called {
         this.updateDate = LocalDateTime.now();
     }
 
-    public void setResponsibleUser(User responsibleUser) {
-        this.responsibleUser = responsibleUser;
+    public void setResponsibleUser(User userResponsible) {
+        this.userResponsible = userResponsible;
     }
 
     public User getUser() {
@@ -122,5 +127,13 @@ public class Called {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<CallHistory> getCallHistory() {
+        return callHistory;
+    }
+
+    public void setCallHistory(List<CallHistory> callHistory) {
+        this.callHistory = callHistory;
     }
 }

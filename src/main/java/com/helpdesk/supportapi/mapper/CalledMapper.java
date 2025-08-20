@@ -36,6 +36,25 @@ public class CalledMapper {
     }
 
     /**
+     * Converter um DTO para calls
+     * Convert a DTO to calls
+     * @param dto
+     * @return Called
+     */
+    public static Called toCalled(CalledDTO dto){
+        if(dto == null){
+            return null;
+        }else{
+            Called called = new Called();
+            called.setId(dto.getId());
+            called.setTitle(dto.getTitle());
+            called.setPriority(dto.getPriority());
+            called.setUpdateDate();
+            return called;
+        }
+    }
+
+    /**
      * Criando um DTO para o called, expondo todos os dados
      * Creating a DTO for the called, exposing all data
      * @param called

@@ -2,7 +2,7 @@ package com.helpdesk.supportapi.repository;
 
 import com.helpdesk.supportapi.model.entity.Called;
 import com.helpdesk.supportapi.model.enums.Priority;
-import com.helpdesk.supportapi.model.enums.Status;
+import com.helpdesk.supportapi.model.enums.StatusCalled;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,8 +26,8 @@ public interface CalledRepository extends JpaRepository<Called, Long> {
     List<Called> findAllByPriority(Priority priority);
 
     /**
-     * Busca todos os chamados com prioridade passada pelo parâmetro.
-     * Search  for all tickets with the priorities passed by parameter.
+     * Busca todos os chamados com prioridades passadas pelo parâmetro, exemplo MEDIUM, HIGH
+     * Search  for all tickets with the priorities passed by parameter, example MEDIUM, HIGH
      *
      * @return Lista de chamados críticos.
      */
@@ -41,7 +41,7 @@ public interface CalledRepository extends JpaRepository<Called, Long> {
      * @return Lista de chamados com o status passado.
      */
     @EntityGraph(attributePaths = {"category", "responsibleUser"})
-    List<Called> findAllByStatus(Status status);
+    List<Called> findAllByStatus(StatusCalled status);
 
     /**
      * Busca todos os chamados com os status passados pelo parâmetro
@@ -50,7 +50,20 @@ public interface CalledRepository extends JpaRepository<Called, Long> {
      * @return Lista de chamados com os status passados.
      */
     @EntityGraph(attributePaths = {"category", "responsibleUser"})
-    List<Called> findAllByStatusIn(List<Status> statusList);
+    List<Called> findAllByStatusIn(List<StatusCalled> statusList);
+
+    /**
+     * Busca todos os chamados de um user especifico pelo ID
+     * Search all calls from a specific user by ID
+     * @param id do User
+     * @return Lista de called do User
+     */
+    @EntityGraph(attributePaths = {"category", "responsibleUser"})
+    List<Called> findAllByUserId(Long id);
+
+
+    @EntityGraph(attributePaths = {"category", "responsibleUser"})
+    List<Called> findAllByUser_IdAndStatus(Long id, StatusCalled status);
 
     /**
      * Busca todos os chamados por nome da categoria associada.
@@ -58,7 +71,6 @@ public interface CalledRepository extends JpaRepository<Called, Long> {
      *
      * @param categoryName Nome da categoria.
      * @return Lista de chamados pertencentes à categoria especificada.
-     *
      * <b>Nota:</b> O filtro depende do nome digitado corretamente pelo usuário,nescessário adicionar % na passada do nome .
      * <b>Note:</b> The filter depends on the user typing the category name correctly.
      */

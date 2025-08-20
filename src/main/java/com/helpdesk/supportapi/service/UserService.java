@@ -2,16 +2,18 @@ package com.helpdesk.supportapi.service;
 
 import com.helpdesk.supportapi.dto.users.*;
 import com.helpdesk.supportapi.exceptions.EmailAlreadyUsedException;
-import com.helpdesk.supportapi.exceptions.EmailNotFound;
+import com.helpdesk.supportapi.exceptions.EmailNotFoundException;
 import com.helpdesk.supportapi.exceptions.UserNotFoundException;
 import com.helpdesk.supportapi.mapper.UserMapper;
 import com.helpdesk.supportapi.model.entity.User;
 import com.helpdesk.supportapi.model.enums.Position;
 import com.helpdesk.supportapi.model.enums.Status;
 import com.helpdesk.supportapi.repository.UserRepository;
+import com.helpdesk.supportapi.service.Utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +28,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // Acha clientes pelo ID
     public UserDetailDTO findById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with " + id + " not found !"));
@@ -34,27 +37,24 @@ public class UserService {
     }
 
     public List<UserDTO> findAll() {
-        List<User> userList = userRepository.findAll();
-        if (userList.isEmpty()) {
-            throw new UserNotFoundException("None User were found !");
-        }
-        return mapToUserDTOList(userList);
+        return mapToUserDTOList(userRepository.findAll());
     }
 
     public UserDTO signUpUser(UserPublicSignupDTO dto) {
-
+        ValidationUtils.validateNotNull(dto);
         User user = UserMapper.toEntityFromPublicSignup(dto);
-
         User userReference = userRepository.findByEmail(user.getEmail());
 
-        if (userReference == null) {
+        if (userReference != null) {
+            throw new EmailAlreadyUsedException("The email: " + user.getEmail() + " already used !");
+        }else{
             user.setPositions(List.of(Position.CUSTOMER));
             return UserMapper.toUserDTO(createUser(user, dto.getPassword()));
         }
-        throw new EmailAlreadyUsedException("The email: " + user.getEmail() + " already used !");
     }
 
     public UserDTO signUpAdmin(UserAdminCreateDTO dto) {
+        ValidationUtils.validateNotNull(dto);
 
         User user = UserMapper.toEntityFromAdmin(dto);
         user.setPositions(new ArrayList<>(dto.getPositions()));
@@ -63,61 +63,55 @@ public class UserService {
     }
 
     public List<UserDTO> listByName(String name) {
+        ValidationUtils.validateNotNull(name);
+
         List<User> userList = userRepository.findByNameIgnoreCase(name);
-        if (userList.isEmpty()) {
-            throw new UserNotFoundException("No User with the name: " + name + " was found !");
-        }
+        ValidationUtils.validateListNotEmpty(userList);
+
         return mapToUserDTOList(userList);
     }
 
     public UserDetailDTO findByEmail(String email) {
-        User userReference = Optional.ofNullable(userRepository.findByEmail(email))
-                .orElseThrow(() -> new EmailNotFound("The email: " + email + " not found !"));
+        ValidationUtils.validateNotNull(email);
 
+        User userReference = Optional.ofNullable(userRepository.findByEmail(email))
+                .orElseThrow(() -> new EmailNotFoundException("The email: " + email + " not found !"));
         return UserMapper.toUserDetailDTO(userReference);
     }
 
     public List<UserDTO> findAllInactiveUsers() {
         List<User> userList = userRepository.findAllInactiveUsers();
-        if (userList.isEmpty()) {
-            throw new UserNotFoundException("No user inactive was found !");
-        }
+        ValidationUtils.validateListNotEmpty(userList);
         return mapToUserDTOList(userList);
     }
 
     public List<UserDTO> findAllActiveUsers() {
         List<User> userList = userRepository.findAllActiveUsers();
-        if (userList.isEmpty()) {
-            throw new UserNotFoundException("No user Active was found !");
-        }
+        ValidationUtils.validateListNotEmpty(userList);
         return mapToUserDTOList(userList);
     }
 
     public List<UserDTO> findAllCustumerUsers() {
         List<User> userList = userRepository.findAllCustumerUsers();
-        if (userList.isEmpty()) {
-            throw new UserNotFoundException("No Customer was found !");
-        }
+        ValidationUtils.validateListNotEmpty(userList);
         return mapToUserDTOList(userList);
     }
 
     public List<UserDetailDTO> findAllAdminUsers() {
         List<User> userList = userRepository.findAllAdminUsers();
-        if (userList.isEmpty()) {
-            throw new UserNotFoundException("No Admin was found !");
-        }
+        ValidationUtils.validateListNotEmpty(userList);
         return mapToUserDetailDTOList(userList);
     }
 
     public List<UserDetailDTO> findAllSupportUsers() {
         List<User> userList = userRepository.findAllSupportUsers();
-        if (userList.isEmpty()) {
-            throw new UserNotFoundException("No Support was found !");
-        }
+        ValidationUtils.validateListNotEmpty(userList);
         return mapToUserDetailDTOList(userList);
     }
 
     public UserDetailDTO updateUser(Long id, UserUpdateDTO dto) {
+        ValidationUtils.validateNotNull(id, dto);
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found !"));
 
@@ -130,7 +124,9 @@ public class UserService {
 
     }
 
-    public UserDetailDTO inactiveUser(Long id){
+    public UserDetailDTO inactiveUser(Long id) {
+        ValidationUtils.validateNotNull(id);
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found !"));
 
@@ -140,7 +136,8 @@ public class UserService {
         return UserMapper.toUserDetailDTO(user);
     }
 
-    public UserDetailDTO activeUser(Long id){
+    public UserDetailDTO activeUser(Long id) {
+        ValidationUtils.validateNotNull(id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found !"));
 
@@ -150,8 +147,9 @@ public class UserService {
         return UserMapper.toUserDetailDTO(user);
     }
 
-    public void deleteUser(Long id){
-        if(!userRepository.existsById(id)){
+    public void deleteUser(Long id) {
+        ValidationUtils.validateNotNull(id);
+        if (!userRepository.existsById(id)) {
             throw new UserNotFoundException("User not found !");
         }
         userRepository.deleteById(id);

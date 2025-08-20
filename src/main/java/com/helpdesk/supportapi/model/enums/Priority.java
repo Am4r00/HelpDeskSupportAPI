@@ -1,10 +1,10 @@
 package com.helpdesk.supportapi.model.enums;
 
 public enum Priority {
-    LOW("Low Priority"),
-    AVARANGE("Medium priority"),
-    HIGH("High priority"),
-    CRITICAL("Critical priority");
+    LOW("P4"),
+    AVERAGE("P3"),
+    HIGH("P2"),
+    CRITICAL("P1");
 
     private final String label;
 

@@ -28,8 +28,8 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(exception, HttpStatus.ALREADY_REPORTED);
     }
 
-    @ExceptionHandler(EmailNotFound.class)
-    public ResponseEntity<ResponseErrorDTO> treatEmailNotFound(EmailNotFound exception) {
+    @ExceptionHandler(EmailNotFoundException.class)
+    public ResponseEntity<ResponseErrorDTO> treatEmailNotFound(EmailNotFoundException exception) {
         return buildErrorResponse(exception, HttpStatus.NOT_FOUND);
     }
 
