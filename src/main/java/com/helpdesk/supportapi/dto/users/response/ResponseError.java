@@ -1,4 +1,4 @@
-package com.helpdesk.supportapi.dto.user.response;
+package com.helpdesk.supportapi.dto.users.response;
 
 import java.time.LocalDateTime;
 

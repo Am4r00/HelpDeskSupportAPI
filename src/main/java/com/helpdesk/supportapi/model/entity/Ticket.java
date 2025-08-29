@@ -43,7 +43,11 @@ public class Ticket {
     @ManyToOne
     private User userResponsible;
 
-    @OneToMany
+    @OneToMany(
+            mappedBy = "ticket",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<TicketHistory> ticketHistory;
 
     public LocalDateTime getCreationDate() {

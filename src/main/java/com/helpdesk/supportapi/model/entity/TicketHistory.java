@@ -16,7 +16,7 @@ public class TicketHistory {
     private String eventDescription;
 
     @ManyToOne(optional = false, fetch =  FetchType.LAZY)
-    @JoinColumn(name = "called_id", nullable = false)
+    @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
 
     @ManyToOne(optional = false, fetch =  FetchType.LAZY)

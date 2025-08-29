@@ -1,6 +1,6 @@
 package com.helpdesk.supportapi.exception;
 
-import com.helpdesk.supportapi.dto.user.response.ResponseError;
+import com.helpdesk.supportapi.dto.users.response.ResponseError;
 import com.helpdesk.supportapi.exception.business.EmailAlreadyUsedException;
 import com.helpdesk.supportapi.exception.business.InvalidStatusException;
 import com.helpdesk.supportapi.exception.domain.EmailNotFoundException;

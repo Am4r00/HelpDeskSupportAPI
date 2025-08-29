@@ -10,25 +10,27 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface TicketHistoryRepository extends JpaRepository<TicketHistory, Long> {
+
+    Optional<TicketHistory> findFirstByTicket_IdOrderByCreatedAtDesc(Long ticketId);
+
     /***
      * Busca td historico do chamado em ordem cronológia em forma de páginas
      * para melhorar a organização dos registros
      * Searches the entire call history in chronological order in page format
      * to improve record organization
      *
-     * @param calledId ID do chamado/ticket
+     * @param TicketId ID do chamado/ticket
      * @return Lista de histórico do chamado em ordem cronológica
      */
-    Page<TicketHistory> findByCalledId(Long calledId, Pageable pageable);
+    Page<TicketHistory> findByTicketId(Long TicketId, Pageable pageable);
 
     /***
      * Busca pelo ultimo evento do histórico do chamado
      * Search for the last event in the call history
-     * @param calledId ID do chamado
+     * @param TicketId ID do chamado
      * @return retorna uma ultima interação do chamado
      */
     @EntityGraph(attributePaths = {"users"})
-    @Query
-    Optional<TicketHistory> findTopByCalledIdOrderByCreatedAtDesc(Long calledId);
+    Optional<TicketHistory> findTopByTicketIdOrderByCreatedAtDesc(Long TicketId);
 
 }

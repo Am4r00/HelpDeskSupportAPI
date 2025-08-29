@@ -74,7 +74,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
      * <b>Nota:</b> O filtro depende do nome digitado corretamente pelo usuário,nescessário adicionar % na passada do nome .
      * <b>Note:</b> The filter depends on the user typing the category name correctly.
      */
-    @Query("SELECT c FROM Ticket c WHERE LOWER(c.category.name) LIKE LOWER(:categoryName)")
+    @Query("SELECT t FROM Ticket t WHERE LOWER(t.category.name) LIKE LOWER(CONCAT('%', :categoryName, '%'))")
     @EntityGraph(attributePaths = {"category", "responsibleUser"})
     List<Ticket> findByCategoryIgnoreCase(@Param("categoryName") String categoryName);
 }

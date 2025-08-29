@@ -1,10 +1,10 @@
 package com.helpdesk.supportapi.service;
 
-import com.helpdesk.supportapi.dto.user.request.AdminCreateRequest;
-import com.helpdesk.supportapi.dto.user.request.PublicSignupRequest;
-import com.helpdesk.supportapi.dto.user.request.UserUpdateRequest;
-import com.helpdesk.supportapi.dto.user.response.UserResponse;
-import com.helpdesk.supportapi.dto.user.response.UserDetailResponse;
+import com.helpdesk.supportapi.dto.users.request.AdminCreateRequest;
+import com.helpdesk.supportapi.dto.users.request.PublicSignupRequest;
+import com.helpdesk.supportapi.dto.users.request.UserUpdateRequest;
+import com.helpdesk.supportapi.dto.users.response.UserResponse;
+import com.helpdesk.supportapi.dto.users.response.UserDetailResponse;
 import com.helpdesk.supportapi.exception.business.EmailAlreadyUsedException;
 import com.helpdesk.supportapi.exception.domain.EmailNotFoundException;
 import com.helpdesk.supportapi.exception.domain.UserNotFoundException;

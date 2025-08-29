@@ -1,4 +1,4 @@
-package com.helpdesk.supportapi.dto.user.request;
+package com.helpdesk.supportapi.dto.users.request;
 
 import com.helpdesk.supportapi.model.enums.Position;
 import com.helpdesk.supportapi.model.enums.Status;
