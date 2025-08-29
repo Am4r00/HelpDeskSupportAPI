@@ -1,15 +1,19 @@
 package com.helpdesk.supportapi.service;
 
-import com.helpdesk.supportapi.dto.users.*;
-import com.helpdesk.supportapi.exceptions.EmailAlreadyUsedException;
-import com.helpdesk.supportapi.exceptions.EmailNotFoundException;
-import com.helpdesk.supportapi.exceptions.UserNotFoundException;
+import com.helpdesk.supportapi.dto.user.request.AdminCreateRequest;
+import com.helpdesk.supportapi.dto.user.request.PublicSignupRequest;
+import com.helpdesk.supportapi.dto.user.request.UserUpdateRequest;
+import com.helpdesk.supportapi.dto.user.response.UserResponse;
+import com.helpdesk.supportapi.dto.user.response.UserDetailResponse;
+import com.helpdesk.supportapi.exception.business.EmailAlreadyUsedException;
+import com.helpdesk.supportapi.exception.domain.EmailNotFoundException;
+import com.helpdesk.supportapi.exception.domain.UserNotFoundException;
 import com.helpdesk.supportapi.mapper.UserMapper;
 import com.helpdesk.supportapi.model.entity.User;
 import com.helpdesk.supportapi.model.enums.Position;
 import com.helpdesk.supportapi.model.enums.Status;
 import com.helpdesk.supportapi.repository.UserRepository;
-import com.helpdesk.supportapi.service.Utils.ValidationUtils;
+import com.helpdesk.supportapi.shared.validation.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,18 +33,18 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     // Acha clientes pelo ID
-    public UserDetailDTO findById(Long id) {
+    public UserDetailResponse findById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with " + id + " not found !"));
 
         return UserMapper.toUserDetailDTO(user);
     }
 
-    public List<UserDTO> findAll() {
+    public List<UserResponse> findAll() {
         return mapToUserDTOList(userRepository.findAll());
     }
 
-    public UserDTO signUpUser(UserPublicSignupDTO dto) {
+    public UserResponse signUpUser(PublicSignupRequest dto) {
         ValidationUtils.validateNotNull(dto);
         User user = UserMapper.toEntityFromPublicSignup(dto);
         User userReference = userRepository.findByEmail(user.getEmail());
@@ -53,7 +57,7 @@ public class UserService {
         }
     }
 
-    public UserDTO signUpAdmin(UserAdminCreateDTO dto) {
+    public UserResponse signUpAdmin(AdminCreateRequest dto) {
         ValidationUtils.validateNotNull(dto);
 
         User user = UserMapper.toEntityFromAdmin(dto);
@@ -62,7 +66,7 @@ public class UserService {
         return UserMapper.toUserDTO(createUser(user, dto.getPassword()));
     }
 
-    public List<UserDTO> listByName(String name) {
+    public List<UserResponse> listByName(String name) {
         ValidationUtils.validateNotNull(name);
 
         List<User> userList = userRepository.findByNameIgnoreCase(name);
@@ -71,7 +75,7 @@ public class UserService {
         return mapToUserDTOList(userList);
     }
 
-    public UserDetailDTO findByEmail(String email) {
+    public UserDetailResponse findByEmail(String email) {
         ValidationUtils.validateNotNull(email);
 
         User userReference = Optional.ofNullable(userRepository.findByEmail(email))
@@ -79,37 +83,37 @@ public class UserService {
         return UserMapper.toUserDetailDTO(userReference);
     }
 
-    public List<UserDTO> findAllInactiveUsers() {
+    public List<UserResponse> findAllInactiveUsers() {
         List<User> userList = userRepository.findAllInactiveUsers();
         ValidationUtils.validateListNotEmpty(userList);
         return mapToUserDTOList(userList);
     }
 
-    public List<UserDTO> findAllActiveUsers() {
+    public List<UserResponse> findAllActiveUsers() {
         List<User> userList = userRepository.findAllActiveUsers();
         ValidationUtils.validateListNotEmpty(userList);
         return mapToUserDTOList(userList);
     }
 
-    public List<UserDTO> findAllCustumerUsers() {
+    public List<UserResponse> findAllCustumerUsers() {
         List<User> userList = userRepository.findAllCustumerUsers();
         ValidationUtils.validateListNotEmpty(userList);
         return mapToUserDTOList(userList);
     }
 
-    public List<UserDetailDTO> findAllAdminUsers() {
+    public List<UserDetailResponse> findAllAdminUsers() {
         List<User> userList = userRepository.findAllAdminUsers();
         ValidationUtils.validateListNotEmpty(userList);
         return mapToUserDetailDTOList(userList);
     }
 
-    public List<UserDetailDTO> findAllSupportUsers() {
+    public List<UserDetailResponse> findAllSupportUsers() {
         List<User> userList = userRepository.findAllSupportUsers();
         ValidationUtils.validateListNotEmpty(userList);
         return mapToUserDetailDTOList(userList);
     }
 
-    public UserDetailDTO updateUser(Long id, UserUpdateDTO dto) {
+    public UserDetailResponse updateUser(Long id, UserUpdateRequest dto) {
         ValidationUtils.validateNotNull(id, dto);
 
         User user = userRepository.findById(id)
@@ -124,7 +128,7 @@ public class UserService {
 
     }
 
-    public UserDetailDTO inactiveUser(Long id) {
+    public UserDetailResponse inactiveUser(Long id) {
         ValidationUtils.validateNotNull(id);
 
         User user = userRepository.findById(id)
@@ -136,7 +140,7 @@ public class UserService {
         return UserMapper.toUserDetailDTO(user);
     }
 
-    public UserDetailDTO activeUser(Long id) {
+    public UserDetailResponse activeUser(Long id) {
         ValidationUtils.validateNotNull(id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found !"));
@@ -167,13 +171,13 @@ public class UserService {
         return user;
     }
 
-    private List<UserDTO> mapToUserDTOList(List<User> userList) {
+    private List<UserResponse> mapToUserDTOList(List<User> userList) {
         return userList.stream()
                 .map(UserMapper::toUserDTO)
                 .collect(Collectors.toList());
     }
 
-    private List<UserDetailDTO> mapToUserDetailDTOList(List<User> userList) {
+    private List<UserDetailResponse> mapToUserDetailDTOList(List<User> userList) {
         return userList.stream()
                 .map(UserMapper::toUserDetailDTO)
                 .collect(Collectors.toList());

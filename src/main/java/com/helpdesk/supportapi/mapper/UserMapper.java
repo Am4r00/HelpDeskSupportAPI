@@ -1,6 +1,10 @@
 package com.helpdesk.supportapi.mapper;
 
-import com.helpdesk.supportapi.dto.users.*;
+import com.helpdesk.supportapi.dto.user.request.AdminCreateRequest;
+import com.helpdesk.supportapi.dto.user.request.PublicSignupRequest;
+import com.helpdesk.supportapi.dto.user.request.UserUpdateRequest;
+import com.helpdesk.supportapi.dto.user.response.UserResponse;
+import com.helpdesk.supportapi.dto.user.response.UserDetailResponse;
 import com.helpdesk.supportapi.model.entity.User;
 
 import java.util.ArrayList;
@@ -14,14 +18,14 @@ public class UserMapper {
      * @param user
      * @return
      */
-    public static UserDTO toUserDTO(User user) {
-        UserDTO userDTO = new UserDTO(
+    public static UserResponse toUserDTO(User user) {
+        UserResponse userResponse = new UserResponse(
                 user.getId(),
                 user.getName(),
                 user.getUsername(),
                 user.getPositions());
 
-        return userDTO;
+        return userResponse;
     }
 
     /**
@@ -31,8 +35,8 @@ public class UserMapper {
      * @param user
      * @return
      */
-    public static UserDetailDTO toUserDetailDTO(User user) {
-        UserDetailDTO userDetailDTO = new UserDetailDTO(
+    public static UserDetailResponse toUserDetailDTO(User user) {
+        UserDetailResponse userDetailResponse = new UserDetailResponse(
                 user.getId(),
                 user.getName(),
                 user.getUsername(),
@@ -40,7 +44,7 @@ public class UserMapper {
                 user.getStatus(),
                 user.getCreationDate());
 
-        return userDetailDTO;
+        return userDetailResponse;
     }
 
     /**
@@ -49,7 +53,7 @@ public class UserMapper {
      * @param user
      * @param dto
      */
-    public static void upDateUser(User user, UserUpdateDTO dto) {
+    public static void upDateUser(User user, UserUpdateRequest dto) {
         if (dto.getName() != null) {
             user.setName(dto.getName());
         }
@@ -70,7 +74,7 @@ public class UserMapper {
      * @param dto
      * @return
      */
-    public static User toEntityFromPublicSignup(UserPublicSignupDTO dto) {
+    public static User toEntityFromPublicSignup(PublicSignupRequest dto) {
         User user = new User(
                 dto.getName(),
                 dto.getPassword(),
@@ -79,13 +83,13 @@ public class UserMapper {
     }
 
     /**
-     * Converte um UserAdminCreateDTO criado pelo Admin em user
-     * Converts a UserAdminCreateDTO created by the Admin to User
+     * Converte um AdminCreateRequest criado pelo Admin em user
+     * Converts a AdminCreateRequest created by the Admin to User
      *
      * @param dto
      * @return
      */
-    public static User toEntityFromAdmin(UserAdminCreateDTO dto) {
+    public static User toEntityFromAdmin(AdminCreateRequest dto) {
         User user = new User(
                 dto.getName(),
                 dto.getPassword(),

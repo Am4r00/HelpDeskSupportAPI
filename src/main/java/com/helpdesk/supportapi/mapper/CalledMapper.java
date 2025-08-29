@@ -1,8 +1,12 @@
 package com.helpdesk.supportapi.mapper;
 
-import com.helpdesk.supportapi.dto.called.*;
-import com.helpdesk.supportapi.dto.category.CategoryMinDTO;
-import com.helpdesk.supportapi.model.entity.Called;
+import com.helpdesk.supportapi.dto.called.request.CreateTicketRequest;
+import com.helpdesk.supportapi.dto.called.request.UpdateTicketRequest;
+import com.helpdesk.supportapi.dto.called.response.TicketResponse;
+import com.helpdesk.supportapi.dto.called.response.TicketDetailResponse;
+import com.helpdesk.supportapi.dto.called.response.UserSummaryResponse;
+import com.helpdesk.supportapi.dto.category.CategorySummaryResponse;
+import com.helpdesk.supportapi.model.entity.Ticket;
 import com.helpdesk.supportapi.model.entity.Category;
 import com.helpdesk.supportapi.model.entity.User;
 
@@ -14,24 +18,24 @@ public class CalledMapper {
     /**
      * Criar um DTO apenas para expor o necessário do chamado
      * Create a DTO just to expose what is necessary for the call
-     * @param called
-     * @return CalledDTO resumido
+     * @param ticket
+     * @return TicketResponse resumido
      */
-    public static CalledDTO toCalledDTO(Called called) {
-        if (called == null) {
+    public static TicketResponse toCalledDTO(Ticket ticket) {
+        if (ticket == null) {
             return null;
         } else {
-            CalledDTO calledDTO = new CalledDTO();
+            TicketResponse ticketResponse = new TicketResponse();
 
             //Criando sem argumentos para evitar telescoping
 
-            calledDTO.setId(called.getId());
-            calledDTO.setTitle(called.getTitle());
-            calledDTO.setPriority(called.getPriority());
-            calledDTO.setStatus(called.getStatus());
-            calledDTO.setUpdateDate(called.getUpdateDate());
+            ticketResponse.setId(ticket.getId());
+            ticketResponse.setTitle(ticket.getTitle());
+            ticketResponse.setPriority(ticket.getPriority());
+            ticketResponse.setStatus(ticket.getStatus());
+            ticketResponse.setUpdateDate(ticket.getUpdateDate());
 
-            return calledDTO;
+            return ticketResponse;
         }
     }
 
@@ -39,62 +43,62 @@ public class CalledMapper {
      * Converter um DTO para calls
      * Convert a DTO to calls
      * @param dto
-     * @return Called
+     * @return Ticket
      */
-    public static Called toCalled(CalledDTO dto){
+    public static Ticket toCalled(TicketResponse dto){
         if(dto == null){
             return null;
         }else{
-            Called called = new Called();
-            called.setId(dto.getId());
-            called.setTitle(dto.getTitle());
-            called.setPriority(dto.getPriority());
-            called.setUpdateDate();
-            return called;
+            Ticket ticket = new Ticket();
+            ticket.setId(dto.getId());
+            ticket.setTitle(dto.getTitle());
+            ticket.setPriority(dto.getPriority());
+            ticket.setUpdateDate();
+            return ticket;
         }
     }
 
     /**
-     * Criando um DTO para o called, expondo todos os dados
-     * Creating a DTO for the called, exposing all data
-     * @param called
-     * @return o called
+     * Criando um DTO para o ticket, expondo todos os dados
+     * Creating a DTO for the ticket, exposing all data
+     * @param ticket
+     * @return o ticket
      */
-    public static CalledDetailDTO toCalledDetailDTO(Called called) {
+    public static TicketDetailResponse toCalledDetailDTO(Ticket ticket) {
 
-        if (called == null) {
+        if (ticket == null) {
             return null;
         } else {
-            CalledDetailDTO calledDetailDTO = new CalledDetailDTO();
+            TicketDetailResponse ticketDetailResponse = new TicketDetailResponse();
 
             //Criando sem argumentos para evitar telescoping
 
-            calledDetailDTO.setId(called.getId());
-            calledDetailDTO.setTitle(called.getTitle());
-            calledDetailDTO.setDescription(called.getDescription());
-            calledDetailDTO.setPriority(called.getPriority());
-            calledDetailDTO.setStatus(called.getStatus());
-            calledDetailDTO.setRequester(toUserMinDTO(called.getUser()));
-            calledDetailDTO.setCategory(toCategoryMinDTO(called.getCategory()));
-            calledDetailDTO.setResponsible(toUserMinDTO(called.getResponsibleUser()));
-            calledDetailDTO.setCreationDate(called.getCreationDate());
-            calledDetailDTO.setUpdateDate(called.getUpdateDate());
+            ticketDetailResponse.setId(ticket.getId());
+            ticketDetailResponse.setTitle(ticket.getTitle());
+            ticketDetailResponse.setDescription(ticket.getDescription());
+            ticketDetailResponse.setPriority(ticket.getPriority());
+            ticketDetailResponse.setStatus(ticket.getStatus());
+            ticketDetailResponse.setRequester(toUserMinDTO(ticket.getUser()));
+            ticketDetailResponse.setCategory(toCategoryMinDTO(ticket.getCategory()));
+            ticketDetailResponse.setResponsible(toUserMinDTO(ticket.getResponsibleUser()));
+            ticketDetailResponse.setCreationDate(ticket.getCreationDate());
+            ticketDetailResponse.setUpdateDate(ticket.getUpdateDate());
 
-            return calledDetailDTO;
+            return ticketDetailResponse;
         }
     }
 
     /**
-     * Criando um DTO para expor apenas o necessário do user no Called.
-     * Creating a DTO to expose only what the user needs in Called.
+     * Criando um DTO para expor apenas o necessário do user no Ticket.
+     * Creating a DTO to expose only what the user needs in Ticket.
      * @param user
      * @return usuário sem dados desnecessários
      */
-    public static UserMinDTO toUserMinDTO(User user) {
+    public static UserSummaryResponse toUserMinDTO(User user) {
         if (user == null) {
             return null;
         } else {
-            return new UserMinDTO(
+            return new UserSummaryResponse(
                     user.getId(),
                     user.getName(),
                     user.getEmail());
@@ -109,17 +113,17 @@ public class CalledMapper {
      * @param userRequester
      * @return called criado
      */
-    public static Called fromCreateDTO(CalledCreateDTO dto, Category category, User userRequester) {
+    public static Ticket fromCreateDTO(CreateTicketRequest dto, Category category, User userRequester) {
         if (dto == null || category == null || userRequester == null) {
             return null;
         } else {
-            Called called = new Called();
-            called.setTitle(dto.getTitle());
-            called.setDescription(dto.getDescription());
-            called.setCategory(category);
-            called.setUser(userRequester);
+            Ticket ticket = new Ticket();
+            ticket.setTitle(dto.getTitle());
+            ticket.setDescription(dto.getDescription());
+            ticket.setCategory(category);
+            ticket.setUser(userRequester);
 
-            return called;
+            return ticket;
 
         }
     }
@@ -130,11 +134,11 @@ public class CalledMapper {
      * @param category
      * @return category resumida
      */
-    public static CategoryMinDTO toCategoryMinDTO(Category category) {
+    public static CategorySummaryResponse toCategoryMinDTO(Category category) {
         if (category == null) {
             return null;
         } else {
-            return new CategoryMinDTO(
+            return new CategorySummaryResponse(
                     category.getId(),
                     category.getName());
         }
@@ -143,36 +147,36 @@ public class CalledMapper {
     /**
      * Faz uma lista de todos os chamados
      * Make a list of all calls
-     * @param calledList
+     * @param ticketList
      * @return retorna uma lista dos calleds
      */
-    public static List<CalledDTO> toCalledDTOList(List<Called> calledList) {
-        return calledList.stream()
+    public static List<TicketResponse> toCalledDTOList(List<Ticket> ticketList) {
+        return ticketList.stream()
                 .map(CalledMapper::toCalledDTO)
                 .collect(Collectors.toList());
 
     }
 
     /**
-     * Usuário altera alguma coisa no called já criado
-     * User changes something in the already created called
-     * @param called
+     * Usuário altera alguma coisa no ticket já criado
+     * User changes something in the already created ticket
+     * @param ticket
      * @param dto
      */
-    public static void applyCalled(Called called, CalledUpdateDTO dto) {
+    public static void applyCalled(Ticket ticket, UpdateTicketRequest dto) {
 
         if (dto.getTitle() != null) {
-            called.setTitle(dto.getTitle());
+            ticket.setTitle(dto.getTitle());
             System.out.println("Titulo alterado !");
         }
 
         if (dto.getDescription() != null) {
-            called.setDescription(dto.getDescription());
+            ticket.setDescription(dto.getDescription());
             System.out.println("Descrição alterada !");
         }
 
         if (dto.getPriority() != null) {
-            called.setPriority(dto.getPriority());
+            ticket.setPriority(dto.getPriority());
             System.out.println("Prioridade alterada !");
         }
     }}
